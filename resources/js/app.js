@@ -1,16 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { createRoot } from 'react-dom/client';
+import {createRoot} from 'react-dom/client';
+
+import {NextUIProvider} from '@nextui-org/react';
 
 const App = () => {
     return (
-        <h1>
-            Hello World!
-        </h1>
+        <NextUIProvider>
+            <h1>
+                Hello World!
+            </h1>
+        </NextUIProvider>
     )
 }
+
+
 const container = document.getElementById('app');
 const root = createRoot(container);
-root.render(<App />);
+root.render(<App/>);
 
 

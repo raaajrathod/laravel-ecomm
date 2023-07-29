@@ -5,16 +5,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 
-Route::middleware('auth:sanctum')->group(function () {
-    // Your authenticated API routes here
+Route::post('login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+
+Route::middleware('auth:api')->group(function () {
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('user', [AuthController::class, 'user']);
 });
 
-
-
-Route::prefix('v0')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-});
 
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
@@ -23,4 +22,5 @@ Route::prefix('products')->group(function () {
     Route::put('/{id}', [ProductController::class, 'update']);
     Route::delete('/{id}', [ProductController::class, 'destroy']);
 });
+
 

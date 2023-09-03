@@ -1,0 +1,57 @@
+version: "3.7"
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: raaajrathod/ecomm_app/php:ecomm-app
+        depends_on:
+            - db
+            - webserver
+        restart: unless-stopped
+        container_name: ecomm_app
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        volumes:
+            - ./app:/var/www
+            - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - ecomm-app-network
+
+    webserver:
+        image: nginx:alpine
+        restart: unless-stopped
+        container_name: ecomm_app_webserver
+        tty: true
+        ports:
+            - "7080:80"
+        volumes:
+            - ./app:/var/www
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+        networks:
+            - ecomm-app-network
+
+    db:
+        image: mariadb
+        container_name: ecomm_app_db
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "33307:3306"
+        environment:
+            MYSQL_DATABASE: ecommerce-app
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_USER: raj
+            MYSQL_PASSWORD: password
+        volumes:
+            - ./mysql/db:/var/lib/mysql
+            - ./mysql/my.cnf:/etc/mysql/my.cnf
+        networks:
+            - ecomm-app-network
+
+networks:
+    ecomm-app-network:
+        driver: bridge

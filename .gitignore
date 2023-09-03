@@ -5,7 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+app/.env
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -17,3 +17,38 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+/app/vendor
+/app/node_modules
+# Environment Configuration
+.env
+
+# Dependency directory
+node_modules
+
+# Test coverage directory
+coverage
+
+# Ignore Apple macOS Desktop Services Store
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# ngrok tunnel file
+config/tunnel.pid
+
+# next build output
+.next/
+
+mysql/db/*
+
+
+app/public/mix-manifest.json
+
+.fleet
+
+.idea
+
+redis/*

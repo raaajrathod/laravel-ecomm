@@ -23,9 +23,7 @@ Route::middleware('auth:api')->group(function () {
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::post('/', [ProductController::class, 'store']);
-    Route::get('/{id}', [ProductController::class, 'show']);
-    Route::put('/{id}', [ProductController::class, 'update']);
-    Route::delete('/{id}', [ProductController::class, 'destroy']);
+    Route::get('/{product_id}', [ProductController::class, 'show']);
 });
 
 // Cart Routes
@@ -36,6 +34,4 @@ Route::group(['prefix' => 'cart', 'middleware' => 'auth:api'], function () {
     Route::delete('/remove/{product_id}', [CartController::class, 'removeFromCart']);
     Route::get('/', [CartController::class, 'getCartItems']);
 });
-
-
 

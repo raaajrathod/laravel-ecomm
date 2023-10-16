@@ -3,40 +3,46 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use GuzzleHttp\Promise\PromiseInterface;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
 
 class ProductController extends Controller
 {
-    //
-    public function index(Request $request): JsonResponse
+
+    public function __construct()
     {
-        $products = Product::all();
-        return response()->json($products);
+        $this->url = env('PRODUCT_SERVICE_URL');
+        $this->token = env('PRODUCT_SERVICE_TOKEN');
+        $this->version = env('PRODUCT_SERVICE_VERSION');
+
+        $this->http = Http::withToken($this->token);
+        $this->href = $this->url . '/' . $this->version . '/products';
     }
 
-    public function store(Request $request): JsonResponse
+
+    // Get All Products
+    public function index(Request $request)
     {
-        $product = Product::create($request->all());
-        return response()->json($product, 201);
+        $url = "{$this->href}";
+
+        return $this->http->get($url);
     }
 
-    public function show($id)
+    public function store(Request $request): PromiseInterface|Response
     {
-        $product = Product::findOrFail($id);
-        return response()->json($product);
+        $url = "{$this->href}";
+
+        return $this->http->post($url);
     }
 
-    public function update(Request $request, $id)
+    public function show(Request $request, $product_id): PromiseInterface|Response
     {
-        $product = Product::findOrFail($id);
-        $product->update($request->all());
-        return response()->json($product, 200);
-    }
 
-    public function destroy($id)
-    {
-        Product::destroy($id);
-        return response()->json(null, 204);
+        $url = "{$this->href}/{$product_id}";
+
+        return $this->http->get($url);
     }
 }
